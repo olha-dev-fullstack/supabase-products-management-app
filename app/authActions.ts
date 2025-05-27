@@ -21,6 +21,7 @@ export const signInWithEmailAndPassword = async (formData: FormData) => {
 export const signUpWithEmailAndPassword = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
+
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -83,6 +84,6 @@ export const resetPasswordAction = async (formData: FormData) => {
   });
 
   if (error) {
-    throw error
+    throw error;
   }
 };
