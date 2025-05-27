@@ -32,13 +32,7 @@ export default function SignInPage() {
         throw error
       }
     } catch (error) {
-    //   toast({
-    //     title: "Please try again.",
-    //     description: "There was an error logging in with Google.",
-    //     variant: "destructive",
-    //   })
-    console.log(error.message);
-    
+      toast.error( "There was an error logging in with Google.")    
       setIsGoogleLoading(false)
     }
   }

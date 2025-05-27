@@ -38,17 +38,17 @@ export async function updateSession(request: NextRequest) {
   // Redirect unauthenticated users to sign-in page
   if (
     !user &&
-    !request.nextUrl.pathname.startsWith("/signin") &&
+    !request.nextUrl.pathname.startsWith("/sign-in") &&
     !request.nextUrl.pathname.startsWith("/auth")
   ) {
     const url = request.nextUrl.clone();
-    url.pathname = "/signin";
+    url.pathname = "/sign-in";
     url.searchParams.set("next", request.nextUrl.pathname);
     return NextResponse.redirect(url);
   }
 
   // Redirect authenticated users attempting to access the sign-in page to the home page
-  if (user && request.nextUrl.pathname.startsWith("/signin")) {
+  if (user && request.nextUrl.pathname.startsWith("/sign-in")) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);
