@@ -15,10 +15,10 @@ export default function Signup() {
       toast.success(
         "Successfully signed up! Check your email for verification link"
       );
+      return redirect("/protected");
     } catch (error) {
       toast.error(error.message);
     }
-    return redirect("/protected");
   };
   return (
     <div className="flex flex-col gap-2 min-w-64 max-w-64 mx-auto">

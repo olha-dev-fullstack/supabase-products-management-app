@@ -1,6 +1,5 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
-import { encodedRedirect } from "@/lib/utils";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -49,8 +48,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   const callbackUrl = formData.get("callbackUrl")?.toString();
 
   if (!email) {
-    console.log("error", "/forgot-password", "Email is required");
-    return;
+    throw new Error("Email is required");
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -58,20 +56,12 @@ export const forgotPasswordAction = async (formData: FormData) => {
   });
 
   if (error) {
-    console.error(error.message);
-    return;
+    throw error;
   }
 
   if (callbackUrl) {
     return redirect(callbackUrl);
   }
-  console.log(
-    "success",
-    "/forgot-password",
-    "Check your email for a link to reset your password."
-  );
-
-  return;
 };
 
 export const resetPasswordAction = async (formData: FormData) => {
@@ -81,19 +71,11 @@ export const resetPasswordAction = async (formData: FormData) => {
   const confirmPassword = formData.get("confirmPassword") as string;
 
   if (!password || !confirmPassword) {
-    encodedRedirect(
-      "error",
-      "/protected/reset-password",
-      "Password and confirm password are required"
-    );
+    throw new Error("Password and confirm password are required");
   }
 
   if (password !== confirmPassword) {
-    encodedRedirect(
-      "error",
-      "/protected/reset-password",
-      "Passwords do not match"
-    );
+    throw new Error("Passwords do not match");
   }
 
   const { error } = await supabase.auth.updateUser({
@@ -101,14 +83,6 @@ export const resetPasswordAction = async (formData: FormData) => {
   });
 
   if (error) {
-    console.log(error);
-    
-    encodedRedirect(
-      "error",
-      "/protected/reset-password",
-      "Password update failed"
-    );
+    throw error
   }
-
-  encodedRedirect("success", "/protected/reset-password", "Password updated");
 };

@@ -13,10 +13,10 @@ export default function SignInPage() {
   const handleSignIn = async (formData: FormData) => {
     try {
       await signInWithEmailAndPassword(formData);
+      return redirect("/protected");
     } catch (error) {
       toast.error(error.message);
     }
-    return redirect("/protected");
   };
   return (
     <div className="flex-1 flex flex-col min-w-64 gap-2">
