@@ -1,55 +1,58 @@
-"use client"
- 
-import { useState } from "react"
-import { useSearchParams } from "next/navigation"
- 
-import { createClient } from "@/lib/supabase/client"
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icon"
-import { toast } from "sonner"
- 
+"use client";
+
+import GoogleSignInButton from "@/components/google-sign-in";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
+import { signInWithEmailAndPassword } from "../authActions";
+
 export default function SignInPage() {
-  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false)
-  const supabase = createClient()
- 
-  const searchParams = useSearchParams()
- 
-  const next = searchParams.get("next")
- 
-  async function signInWithGoogle() {
-    setIsGoogleLoading(true)
+  const handleSignIn = async (formData: FormData) => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback${
-            next ? `?next=${encodeURIComponent(next)}` : ""
-          }`,
-        },
-      })
- 
-      if (error) {
-        throw error
-      }
+      await signInWithEmailAndPassword(formData);
     } catch (error) {
-      toast.error( "There was an error logging in with Google.")    
-      setIsGoogleLoading(false)
+      toast.error(error.message);
     }
-  }
- 
+    return redirect("/protected");
+  };
   return (
-    <Button
-      type="button"
-      variant="outline"
-      onClick={signInWithGoogle}
-      disabled={isGoogleLoading}
-    >
-      {isGoogleLoading ? (
-        <Icons.loaderCircle className="mr-2 size-4 animate-spin" />
-      ) : (
-        <Icons.google className="mr-2 size-6" />
-      )}{" "}
-      Sign in with Google
-    </Button>
-  )
+    <div className="flex-1 flex flex-col min-w-64 gap-2">
+      <form>
+        <h1 className="text-2xl font-medium">Sign in</h1>
+        <p className="text-sm text-foreground">
+          Don&apos;t have an account?{" "}
+          <Link
+            className="text-foreground font-medium underline"
+            href="/sign-up"
+          >
+            Sign up
+          </Link>
+        </p>
+        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+          <Label htmlFor="email">Email</Label>
+          <Input name="email" placeholder="you@example.com" required />
+          <div className="flex justify-between items-center">
+            <Label htmlFor="password">Password</Label>
+            <Link
+              className="text-xs text-foreground underline"
+              href="/forgot-password"
+            >
+              Forgot Password?
+            </Link>
+          </div>
+          <Input
+            type="password"
+            name="password"
+            placeholder="Your password"
+            required
+          />
+          <Button formAction={handleSignIn}>Sign in</Button>
+        </div>
+      </form>
+      <GoogleSignInButton />
+    </div>
+  );
 }
