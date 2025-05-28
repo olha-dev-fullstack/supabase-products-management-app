@@ -11,7 +11,7 @@ entrypoint = "./functions/hello-world/index.ts"
 # static_files = [ "./functions/hello-world/*.html" ]
 
 [api]
-external_url = "http://localhost:54321"
+external_url = "http://127.0.0.1:54321"
 
 [auth]
 site_url = "env(NEXT_PUBLIC_URL)"
@@ -26,4 +26,4 @@ enable_confirmations = true
 enabled = true
 client_id = "env(GOOGLE_CLIENT_ID)"
 secret = "env(GOOGLE_CLIENT_SECRET)"
-redirect_uri = "http://localhost:54321/auth/v1/callback"
+redirect_uri = "http://127.0.0.1:54321/auth/v1/callback"
