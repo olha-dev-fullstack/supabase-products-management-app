@@ -9,3 +9,21 @@ entrypoint = "./functions/hello-world/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/hello-world/*.html" ]
+
+[api]
+external_url = "http://localhost:54321"
+
+[auth]
+site_url = "env(NEXT_PUBLIC_URL)"
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+
+
+[auth.external.google]
+enabled = true
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_CLIENT_SECRET)"
+redirect_uri = "http://localhost:54321/auth/v1/callback"
