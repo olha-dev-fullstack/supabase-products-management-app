@@ -6,7 +6,11 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import getDB from "../_shared/db.ts";
 import { teams } from "../_shared/schema.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
   if (req.method !== "POST") {
     return new Response("Only POST allowed", { status: 405 });
   }
@@ -30,11 +34,12 @@ Deno.serve(async (req) => {
 
     return new Response(JSON.stringify(result), {
       status: 201,
-      headers: { "Content-Type": "application/json" },
+      headers: {  ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
     console.error("Error:", err);
     return new Response(JSON.stringify({ error: "Server error" }), {
+      headers: { ...corsHeaders},
       status: 500,
     });
   }

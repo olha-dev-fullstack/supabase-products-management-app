@@ -10,7 +10,6 @@ entrypoint = "./functions/hello-world/index.ts"
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/hello-world/*.html" ]
 
-
 [api]
 enabled = true
 external_url = "http://127.0.0.1:54321"
@@ -39,9 +38,10 @@ enabled = true
 client_id = "env(GOOGLE_CLIENT_ID)"
 secret = "env(GOOGLE_CLIENT_SECRET)"
 redirect_uri = "http://127.0.0.1:54321/auth/v1/callback"
+
 [functions.create-team]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/create-team/deno.json"
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx

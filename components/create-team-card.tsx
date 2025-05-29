@@ -1,37 +1,53 @@
-
-
-import { Button } from "@/components/ui/button"
+"use client";
+import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-
-
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useMutation } from "@tanstack/react-query";
+import { useTeams } from "../hooks/use-teams";
 
 const CreateTeamCard = () => {
+  const { createTeam } = useTeams();
+
+  const mutation = useMutation({
+    mutationFn: createTeam,
+  });
+
+  const handleCreateTeam = (formData: FormData) => {
+    console.log(formData);
+    
+    // const name = formData.get("name");
+    // if(!name || name === "") {
+    //   toast.error("Name cannot be empty")
+    // }
+    mutation.mutate({
+      name: formData.get("name") as string,
+    });
+  };
   return (
     <Card className="w-[350px]">
-    <CardHeader>
-      <CardTitle>Create team</CardTitle>
-    </CardHeader>
-    <CardContent>
       <form>
-        <div className="grid w-full items-center gap-4">
-          <div className="flex flex-col space-y-1.5">
-            <Input id="name" placeholder="Name of your team" />
+        <CardHeader>
+          <CardTitle>Create team</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Input id="name" name="name" placeholder="Name of your team" required />
+            </div>
           </div>
-        </div>
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <Button formAction={handleCreateTeam}>Create</Button>
+        </CardFooter>
       </form>
-    </CardContent>
-    <CardFooter className="flex justify-center">
-      <Button>Create</Button>
-    </CardFooter>
-  </Card>
-  )
-}
+    </Card>
+  );
+};
 
-export default CreateTeamCard
+export default CreateTeamCard;
