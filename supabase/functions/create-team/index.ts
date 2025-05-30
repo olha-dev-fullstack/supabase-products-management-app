@@ -4,42 +4,56 @@
 
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import getDB from "../_shared/db.ts";
-import { teams } from "../_shared/schema.ts";
 import { corsHeaders } from "../_shared/cors.ts";
+import getDB from "../_shared/db.ts";
+import { teams, users } from "../_shared/schema.ts";
+import { getUserFromAuth } from "../_shared/supabase-client.ts";
+import { eq } from "drizzle-orm";
+
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
   }
   if (req.method !== "POST") {
     return new Response("Only POST allowed", { status: 405 });
   }
   try {
+    
     const db = getDB();
     const { name: teamName } = await req.json();
+    const user = await getUserFromAuth(req);
+    const userId = user.id;
 
     if (!teamName) {
       return new Response("Missing team name", { status: 400 });
     }
 
     const joinCode = crypto.randomUUID().slice(0, 6);
-    console.log(joinCode);
 
-    const result = await db.insert(teams).values({
-      name: teamName,
-      joinCode,
-    }).returning();
+    const result = await db
+      .insert(teams)
+      .values({
+        name: teamName,
+        joinCode,
+      })
+      .returning();
+    console.log("created team", result);
 
-    
+    await db
+      .update(users)
+      .set({
+        teamId: result[0].id,
+      })
+      .where(eq(users.id, userId));
 
     return new Response(JSON.stringify(result), {
       status: 201,
-      headers: {  ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
     console.error("Error:", err);
     return new Response(JSON.stringify({ error: "Server error" }), {
-      headers: { ...corsHeaders},
+      headers: { ...corsHeaders },
       status: 500,
     });
   }
