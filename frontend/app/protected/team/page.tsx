@@ -11,26 +11,26 @@ import { toast } from "sonner";
 const TeamsPage = () => {
   const { getTeam } = useTeams();
   const { session } = useUser();
-  const { isPending, isError, data, error } = useQuery({
+  const { isLoading, isError, data,  error } = useQuery({
     queryKey: ["team"],
     queryFn: getTeam,
     enabled: !!session,
-    
   });
 
   const router = useRouter();
   const pathname = usePathname();
+
   useEffect(() => {
-    if(isPending) return;
+    if(isLoading) return;
     if (data?.id) {
       router.push(`${pathname}/${data.id}`);
     }
     if (isError) {
       toast.error(error.message);
     }
-  }, [isPending]);
+  }, [isLoading, data]);
 
-  if (isPending) {
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 

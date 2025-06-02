@@ -52,11 +52,36 @@ export const useTeams = () => {
           },
         }
       );
-     return teamData;
+      return teamData;
     } catch (error) {
       console.log(error.message);
+      throw error;
     }
   }
 
-  return { createTeam, getTeam, getTeamById };
+  const joinTeam = async ({
+    joinCode
+  }: {
+    joinCode: string;
+  }) => {
+    try {
+      const { data: joinedTeam } = await requestClient.post(
+        "/join-team",
+        {
+          joinCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        }
+      );
+      return joinedTeam;
+    } catch (error) {
+      console.log(error.message);
+      throw error;
+    }
+  }
+
+  return { createTeam, getTeam, getTeamById, joinTeam };
 };

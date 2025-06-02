@@ -29,12 +29,12 @@ const CreateTeamCard = () => {
   };
   return (
     <Card className="w-[350px]">
-      <form>
         <CardHeader>
           <CardTitle>Create team</CardTitle>
         </CardHeader>
+      <form className="gap-4">
         <CardContent>
-          <div className="grid w-full items-center gap-4">
+          <div className="grid w-full items-center">
             <div className="flex flex-col space-y-1.5">
               <Input
                 id="name"
