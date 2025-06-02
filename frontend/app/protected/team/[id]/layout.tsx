@@ -32,12 +32,10 @@ const TeamPageLayout = ({
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen className="w-auto">
       <AppSidebar teamName={data.name} />
-      <>
-        <SidebarTrigger />
-        {children}
-      </>
+      <SidebarTrigger />
+      <div className="p-5">{children}</div>
     </SidebarProvider>
   );
 };

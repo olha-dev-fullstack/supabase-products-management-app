@@ -1,0 +1,46 @@
+"use client"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarMenuButton,
+} from "@/components/ui/sidebar";
+import { House, PersonStanding, ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+export function AppSidebar({ teamName }: { teamName: string }) {
+  const pathname = usePathname();
+  return (
+    <Sidebar variant="sidebar" collapsible="icon" className="sticky">
+      <SidebarHeader>
+        <div className="flex items-center">
+          <House />
+          <span className="text-lg font-semibold px-4 py-2 group-data-[collapsible=icon]:hidden">
+            {teamName}
+          </span>
+        </div>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenuButton asChild>
+            <Link href={`${pathname}/products`}>
+              <ShoppingBag />
+              <span>Products</span>
+            </Link>
+          </SidebarMenuButton>
+          <SidebarMenuButton asChild>
+            <Link href={`${pathname}/members`}>
+              <PersonStanding />
+              <span>Members</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarGroup>
+        <SidebarGroup />
+      </SidebarContent>
+      <SidebarFooter />
+    </Sidebar>
+  );
+}

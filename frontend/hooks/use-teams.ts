@@ -20,6 +20,7 @@ export const useTeams = () => {
           },
         }
       );
+      return createdTeam;
     } catch (error) {
       console.log(error.message);
     }
