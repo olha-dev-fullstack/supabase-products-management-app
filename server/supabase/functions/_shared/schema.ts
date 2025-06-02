@@ -1,4 +1,4 @@
-import { pgTable, foreignKey, unique, uuid, text, check, timestamp, varchar } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, unique, uuid, text, check, timestamp, varchar, pgEnum } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const users = pgTable("users", {
@@ -31,4 +31,17 @@ export const teams = pgTable("teams", {
 
 export const authUsers = pgTable("auth.users", {
   id: uuid("id").notNull().primaryKey(),
+});
+
+export const productStatus = pgEnum('product_status', ['Draft', 'Active', 'Deleted']);
+
+export const products = pgTable('products', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  imageUrl: text('image_url'),
+  status: productStatus('status').notNull().default('Draft'),
+  createdBy: uuid('created_by').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 });
