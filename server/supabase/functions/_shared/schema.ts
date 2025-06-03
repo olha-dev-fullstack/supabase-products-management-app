@@ -38,10 +38,10 @@ export const productStatus = pgEnum('product_status', ['Draft', 'Active', 'Delet
 export const products = pgTable('products', {
   id: uuid('id').primaryKey().defaultRandom(),
   title: text('title').notNull(),
-  description: text('description').notNull(),
+  description: text('description'),
   imageUrl: text('image_url'),
   status: productStatus('status').notNull().default('Draft'),
-  createdBy: uuid('created_by').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  teamId: uuid('team_id').notNull().references(() => teams.id, { onDelete: 'cascade' }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 });

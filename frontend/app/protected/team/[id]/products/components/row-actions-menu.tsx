@@ -2,23 +2,22 @@ import { Row } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
-import EditProductDialog from "./edit-product-dialog";
 import DeleteProductDialog from "./delete-product-dialog";
+import EditProductDialog from "./edit-product-dialog";
 
 export const RowActionsMenu = ({ row }: {row: Row<any>}) => {
     const product = row.original;
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [productStatus, changeProductStatus] = useState(product.status)
     return (
       <>
         <DropdownMenu>
@@ -30,8 +29,8 @@ export const RowActionsMenu = ({ row }: {row: Row<any>}) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
-              {product.status === "Active" ? "Unpublish" : "Publish"}
+            <DropdownMenuItem onClick={() => changeProductStatus(productStatus === "Active" ? "Draft" : "Active")}>
+              {productStatus === "Active" ? "Unpublish" : "Publish"}
             </DropdownMenuItem>
 
             <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
