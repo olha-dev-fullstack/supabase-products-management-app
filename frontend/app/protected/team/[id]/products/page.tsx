@@ -1,6 +1,7 @@
 import React from "react";
 import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
+import { AddProductDialog } from "./components/add-product-dialog";
 
 // interface Props {
 //   params: { id: string };
@@ -53,10 +54,11 @@ const ProductsPage = async () => {
   // const { data, total, perPage } = await getProducts({});
 
   return (
-    <>
+    <div className="flex flex-col gap-3">
       <h1 className="text-2xl font-bold mb-4">Products</h1>
       <DataTable data={fakeProducts} columns={columns} />
-    </>
+      <AddProductDialog />
+    </div>
   );
 };
 
