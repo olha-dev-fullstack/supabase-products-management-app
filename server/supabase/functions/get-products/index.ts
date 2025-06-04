@@ -5,10 +5,9 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { corsHeaders } from "../_shared/cors.ts";
-import getDB from "../_shared/db.ts";
-import { products, users } from "../_shared/schema.ts";
-import { getDrizzleDbClient, getUserFromAuth } from "../_shared/supabase-client.ts";
-import { eq, sql } from "drizzle-orm";
+import { getDrizzleDbClient } from "../_shared/db.ts";
+import { products } from "../_shared/schema.ts";
+import { getUserFromAuth } from "../_shared/supabase-client.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -18,11 +17,7 @@ Deno.serve(async (req) => {
     return new Response("Only GET allowed", { status: 405 });
   }
   try {
-    const user = await getUserFromAuth(req);
-
-    const db = getDB();
     const drizzleDb = await getDrizzleDbClient(req)
-
     const result = await drizzleDb.rls((tx)=> tx.select().from(products));
     
     return new Response(JSON.stringify(result), {

@@ -1,5 +1,8 @@
 import { sql } from "drizzle-orm";
 import { PgDatabase } from "drizzle-orm/pg-core";
+import postgres from "postgres";
+import { jwtDecode, JwtPayload } from "npm:jwt-decode";
+import { drizzle } from "drizzle-orm/postgres-js";
 
 export function createDrizzle(
   userId: string,
@@ -37,3 +40,14 @@ export function createDrizzle(
     }) as typeof client.transaction,
   };
 }
+export function decode(accessToken: string) {
+  try {
+    return jwtDecode<JwtPayload & { role: string }>(accessToken);
+  } catch (error) {
+    return { role: "anon" } as JwtPayload & { role: string };
+  }
+}
+
+export const client = drizzle({
+  client: postgres(Deno.env.get("SUPABASE_DB_URL"), { prepare: false }),
+});
