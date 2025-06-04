@@ -17,7 +17,6 @@ export const supabaseClient = (req) =>
   );
 
 export const getUserFromAuth = async (req) => {
-  console.log("create client req", req);
   const {
     data: { user },
   } = await supabaseClient(req).auth.getUser();

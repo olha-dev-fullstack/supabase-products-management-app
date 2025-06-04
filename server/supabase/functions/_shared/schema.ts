@@ -80,13 +80,15 @@ export const products = pgTable(
   },
   (table) => [
     pgPolicy("authenticated can view products from their team", {
-      for: "select",
+      for: "all",
       // using predefined role from Supabase
       to: authenticatedRole,
-    //   using: sql`(EXISTS ( SELECT 1
-	// 	FROM users
-	//    WHERE ((users.id = auth.uid()) AND (users.team_id = products.team_id))))`,
-	using: sql`false`
+      using: sql`(EXISTS ( SELECT 1
+		FROM users
+	   WHERE ((users.id = auth.uid()) AND (users.team_id = products.team_id))))`,
+      withCheck: sql`(EXISTS ( SELECT 1
+		FROM users
+	   WHERE ((users.id = auth.uid()) AND (users.team_id = products.team_id))))`,
     }),
   ]
 );

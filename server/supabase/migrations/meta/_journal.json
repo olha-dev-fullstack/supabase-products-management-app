@@ -36,6 +36,13 @@
       "when": 1749029751472,
       "tag": "0004_20250604123514_add_rls_products_table",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1749035966433,
+      "tag": "0005_20250604141906_edit_rls_products_table",
+      "breakpoints": true
     }
   ]
 }
