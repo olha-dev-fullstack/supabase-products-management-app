@@ -3,6 +3,7 @@
     "drizzle-orm/pg-core": "npm:drizzle-orm/pg-core",
     "drizzle-orm/postgres-js": "npm:drizzle-orm/postgres-js",
     "postgres": "npm:postgres",
-    "drizzle-orm": "npm:drizzle-orm"
+    "drizzle-orm": "npm:drizzle-orm",
+    "drizzle-orm/supabase": "npm:drizzle-orm/supabase"
   }
 }

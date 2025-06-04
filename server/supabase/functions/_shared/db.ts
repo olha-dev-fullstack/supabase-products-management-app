@@ -6,3 +6,4 @@ export default function getDb() {
   const db = drizzle(client);
   return db;
 }
+
