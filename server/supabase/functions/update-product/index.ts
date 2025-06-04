@@ -9,25 +9,28 @@ import { getDrizzleDbClient } from "../_shared/db.ts";
 import { products } from "../_shared/schema.ts";
 import { eq } from "drizzle-orm";
 
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
-  if (req.method !== "DELETE") {
-    return new Response("Only DELETE allowed", { status: 405 });
+  if (req.method !== "PATCH") {
+    return new Response("Only PATCH allowed", { status: 405 });
   }
-  const url = new URL(req.url);
-  const productIdFromUrl = url.searchParams.get("id");
-  if (!productIdFromUrl) {
+
+  try {
+  const { id, data}  = await req.json();
+
+  if (!id) {
     return new Response(JSON.stringify({ error: "No id provided" }), {
       headers: { ...corsHeaders },
       status: 400,
     });
   }
-  try {
+
     const drizzleDb = await getDrizzleDbClient(req);
     const productFromDb = await drizzleDb.rls((tx) =>
-      tx.select().from(products).where(eq(products.id, productIdFromUrl))
+      tx.select().from(products).where(eq(products.id, id))
     );
     if (!productFromDb.length) {
       return new Response(JSON.stringify({ error: "Product not found" }), {
@@ -36,7 +39,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const result = await drizzleDb.rls(tx => tx.delete(products).where(eq(products.id, productIdFromUrl)).returning({id: products.id}));
+    const result = await drizzleDb.rls(tx => tx.update(products).set({...data}).where(eq(products.id, id)).returning({id: products.id}));
     return new Response(JSON.stringify(result), {
       status: 201,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -48,14 +51,14 @@ Deno.serve(async (req) => {
       status: 500,
     });
   }
-});
+})
 
 /* To invoke locally:
 
   1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
   2. Make an HTTP request:
 
-  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/delete-product' \
+  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/update-product' \
     --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
     --header 'Content-Type: application/json' \
     --data '{"name":"Functions"}'
