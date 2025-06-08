@@ -9,24 +9,27 @@ import { getDrizzleDbClient } from "../_shared/db.ts";
 import { products } from "../_shared/schema.ts";
 import { eq } from "drizzle-orm";
 
-
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
   if (req.method !== "PATCH") {
-    return new Response("Only PATCH allowed", { status: 405 });
-  }
-
-  try {
-  const { id, data}  = await req.json();
-
-  if (!id) {
-    return new Response(JSON.stringify({ error: "No id provided" }), {
-      headers: { ...corsHeaders },
-      status: 400,
+    return new Response("Only PATCH allowed", {
+      status: 405,
+      headers: corsHeaders, // <-- Always include CORS headers
     });
   }
+
+  
+  try {
+    const { id, data } = await req.json();
+
+    if (!id) {
+      return new Response(JSON.stringify({ error: "No id provided" }), {
+        status: 400,
+        headers: { ...corsHeaders },
+      });
+    }
 
     const drizzleDb = await getDrizzleDbClient(req);
     const productFromDb = await drizzleDb.rls((tx) =>
@@ -39,7 +42,13 @@ Deno.serve(async (req) => {
       });
     }
 
-    const result = await drizzleDb.rls(tx => tx.update(products).set({...data}).where(eq(products.id, id)).returning({id: products.id}));
+    const result = await drizzleDb.rls((tx) =>
+      tx
+        .update(products)
+        .set({ ...data })
+        .where(eq(products.id, id))
+        .returning({ id: products.id })
+    );
     return new Response(JSON.stringify(result), {
       status: 201,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -51,7 +60,7 @@ Deno.serve(async (req) => {
       status: 500,
     });
   }
-})
+});
 
 /* To invoke locally:
 

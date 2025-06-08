@@ -8,6 +8,7 @@ import { corsHeaders } from "../_shared/cors.ts";
 import { getDrizzleDbClient } from "../_shared/db.ts";
 import { products } from "../_shared/schema.ts";
 import { getUserFromAuth } from "../_shared/supabase-client.ts";
+import { asc, ne } from "drizzle-orm";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -18,7 +19,7 @@ Deno.serve(async (req) => {
   }
   try {
     const drizzleDb = await getDrizzleDbClient(req)
-    const result = await drizzleDb.rls((tx)=> tx.select().from(products));
+    const result = await drizzleDb.rls((tx)=> tx.select().from(products).where(ne(products.status, "Deleted")).orderBy(asc(products.createdAt)));
     
     return new Response(JSON.stringify(result), {
       status: 200,

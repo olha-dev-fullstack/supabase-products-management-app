@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import RowActionsMenu from "./row-actions-menu";
+import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -11,6 +12,10 @@ export const columns: ColumnDef<any>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({row}) => {
+      const status = row.getValue("status") as string;
+      return <Badge variant={status === "Active" ? "default" : "secondary"}>{status}</Badge>
+    }
   },
   {
     accessorKey: "createdAt",

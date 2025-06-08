@@ -12,12 +12,32 @@ import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import DeleteProductDialog from "./delete-product-dialog";
 import EditProductDialog from "./edit-product-dialog";
+import { StatusEnum, useProducts } from "@/hooks/use-products";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const RowActionsMenu = ({ row }: {row: Row<any>}) => {
     const product = row.original;
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const [productStatus, changeProductStatus] = useState(product.status)
+    const { editProduct } = useProducts();
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+      mutationFn: editProduct,
+      onSuccess: () => {
+        queryClient.invalidateQueries(["products"]);
+      },
+    });
+  
+    const handleChangeProductStatus = () => {
+      const statusToSet = product.status === "Active" ? StatusEnum.DRAFT : StatusEnum.ACTIVE;
+      try {
+        mutation.mutate({id: product.id, data: {status: statusToSet}});
+      } catch (error) {
+        console.log(error.message);
+        toast.error(error.message);
+      }
+    };
+
     return (
       <>
         <DropdownMenu>
@@ -29,15 +49,15 @@ export const RowActionsMenu = ({ row }: {row: Row<any>}) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => changeProductStatus(productStatus === "Active" ? "Draft" : "Active")}>
-              {productStatus === "Active" ? "Unpublish" : "Publish"}
+            <DropdownMenuItem onClick={handleChangeProductStatus}>
+              {product.status === "Active" ? "Unpublish" : "Publish"}
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+            <DropdownMenuItem disabled={product.status === "Active"} onClick={() => setIsEditDialogOpen(true)}>
               Edit product
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
+            <DropdownMenuItem className="text-red-500" onClick={() => setIsDeleteDialogOpen(true)}>
               Delete product
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -48,6 +68,7 @@ export const RowActionsMenu = ({ row }: {row: Row<any>}) => {
           setOpen={setIsEditDialogOpen}
         />
         <DeleteProductDialog
+        productId={product.id}
           isOpen={isDeleteDialogOpen}
           setOpen={setIsDeleteDialogOpen}
         />

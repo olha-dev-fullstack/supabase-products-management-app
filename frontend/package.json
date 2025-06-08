@@ -37,7 +37,9 @@
     "react-icons": "^5.5.0",
     "server-only": "^0.0.1",
     "sonner": "^2.0.3",
-    "tailwind-merge": "^3.3.0"
+    "tailwind-merge": "^3.3.0",
+    "zod": "^3.25.51",
+    "zod-form-data": "^3.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
