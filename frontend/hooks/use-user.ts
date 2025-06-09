@@ -2,7 +2,7 @@ import { AuthError, Session, User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 
 import { createClient } from "@/lib/supabase/client";
-
+import { requestClient } from "@/lib/request-client";
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
@@ -23,6 +23,8 @@ export function useUser() {
         if (session) {
           setSession(session);
           setUser(session.user);
+
+          
         }
       } catch (error) {
         setError(error as AuthError);
@@ -33,5 +35,15 @@ export function useUser() {
     fetchUser();
   }, []);
 
-  return { loading, error, session, user };
+  const getUserFromDb = async () => {
+    const { data: userFromDb } = await requestClient.get("/get-me", {
+      headers: {
+        Authorization: `Bearer ${session?.access_token}`,
+      },
+    });
+
+    return userFromDb;
+  }
+
+  return { loading, error, session, user, getUserFromDb };
 }
