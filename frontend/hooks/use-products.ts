@@ -37,15 +37,15 @@ export const useProducts = () => {
     }
   };
 
-  const getProducts = async () => {
+  const getProducts = async (pageIndex = 1, pageSize = 10) => {
     try {
-      const { data: productsData } = await requestClient.get(`/get-products`, {
+      const { data: productsData } = await requestClient.get(`/get-products?page=${pageIndex+1}&pageSize=${pageSize}`, {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
         },
       });
       const transformed = await Promise.all(
-        productsData.map(async (product) => ({
+        productsData.result.map(async (product) => ({
           ...product,
           imageUrl: product.imageUrl
             ? await getFileUrl(product.imageUrl)
@@ -53,7 +53,7 @@ export const useProducts = () => {
         }))
       );
 
-      return transformed;
+      return {data: transformed, totalPages: productsData.totalPages};
     } catch (error) {
       console.log(error.message);
     }

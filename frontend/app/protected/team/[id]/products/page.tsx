@@ -1,22 +1,26 @@
 "use client";
 import { useProducts } from "@/hooks/use-products";
 import { useUser } from "@/hooks/use-user";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 import { AddProductDialog } from "./components/add-product-dialog";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
+import { useState } from "react";
 
 const ProductsPage = () => {
   const { getProducts } = useProducts();
   const { session } = useUser();
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageSize = 2;
 
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["products"],
-    queryFn: getProducts,
+    queryKey: ["products", pageIndex],
+    queryFn: () => getProducts(pageIndex, pageSize),
     enabled: !!session,
-    retry: false
+    retry: false,
+    placeholderData: keepPreviousData
   });
 
   if (isError || error) {
@@ -33,14 +37,14 @@ const ProductsPage = () => {
     return <p>Loading...</p>;
   }
 
-  console.log(data);
+  console.log('333333',data);
 
   return (
     <div className="flex flex-col gap-3">
       <h1 className="text-2xl font-bold mb-4">Products</h1>
       {data && (
         <>
-          <DataTable data={data} columns={columns} />
+          <DataTable data={data.data} columns={columns} pageIndex={pageIndex} setPageIndex={setPageIndex} pageSize={pageSize} totalPages={data.totalPages}/>
           <AddProductDialog />
         </>
       )}
