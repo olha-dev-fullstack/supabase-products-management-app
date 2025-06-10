@@ -44,7 +44,7 @@ const TeamPageLayout = ({
     <SidebarProvider defaultOpen className="w-auto">
       {data && (
         <>
-          <AppSidebar teamName={data.name} />
+          <AppSidebar teamId={data.id} teamName={data.name} />
           <SidebarTrigger />
           <div className="p-5 w-full">{children}</div>
         </>

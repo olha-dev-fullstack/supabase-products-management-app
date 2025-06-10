@@ -11,8 +11,8 @@ import { House, PersonStanding, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export function AppSidebar({ teamName }: { teamName: string }) {
-  const pathname = usePathname();
+export function AppSidebar({ teamId, teamName }: { teamId: string, teamName: string }) {
+  const origin = window.location.origin;
   return (
     <Sidebar variant="sidebar" collapsible="icon" className="sticky">
       <SidebarHeader>
@@ -26,13 +26,13 @@ export function AppSidebar({ teamName }: { teamName: string }) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenuButton asChild>
-            <Link href={`${pathname}/products`}>
+            <Link href={`${origin}/protected/team/${teamId}/products`}>
               <ShoppingBag />
               <span>Products</span>
             </Link>
           </SidebarMenuButton>
           <SidebarMenuButton asChild>
-            <Link href={`${pathname}/members`}>
+            <Link href={`${origin}/protected/team/${teamId}/members`}>
               <PersonStanding />
               <span>Members</span>
             </Link>
