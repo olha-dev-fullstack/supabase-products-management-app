@@ -4,6 +4,9 @@ import postgres from "postgres";
 import { jwtDecode, JwtPayload } from "npm:jwt-decode";
 import { drizzle } from "drizzle-orm/postgres-js";
 
+const connectionString = Deno.env.get("SUPABASE_DB_URL")!;
+const cleanedConnectionString = connectionString.replace(/\?sslmode=prefer$/, "");
+
 export function createDrizzle(
   userId: string,
   userRole: string,
@@ -49,5 +52,5 @@ export function decode(accessToken: string) {
 }
 
 export const client = drizzle({
-  client: postgres(Deno.env.get("SUPABASE_DB_URL"), { prepare: false }),
+  client: postgres(cleanedConnectionString, { prepare: false }),
 });

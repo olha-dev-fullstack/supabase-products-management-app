@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
-import { signInWithEmailAndPassword } from "../authActions";
+import { signInWithEmailAndPassword } from "../../authActions";
 
 export default function SignInPage() {
   const handleSignIn = async (formData: FormData) => {

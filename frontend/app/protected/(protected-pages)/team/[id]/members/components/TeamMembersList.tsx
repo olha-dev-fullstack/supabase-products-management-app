@@ -4,12 +4,9 @@ import Image from "next/image";
 
 export default function TeamMembersList({ data, isLoading, error }: any) {
   const presence = usePresence();
-console.log('presence', presence);
 
   if (isLoading) return <div>Loading members...</div>;
   if (error) return <div>Error loading members.</div>;
-
-  console.log(data);
 
   return (
     <div className="grid gap-4">

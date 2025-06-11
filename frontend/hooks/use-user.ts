@@ -23,8 +23,6 @@ export function useUser() {
         if (session) {
           setSession(session);
           setUser(session.user);
-
-          
         }
       } catch (error) {
         setError(error as AuthError);

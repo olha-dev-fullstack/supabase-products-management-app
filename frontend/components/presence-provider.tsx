@@ -19,7 +19,6 @@ export default function PresenceProvider({
   const supabase = createClient();
   const { user, getUserFromDb } = useUser();
   const [status, setStatus] = useState<OnlineStatus>({});
-  console.log("123", user);
 
   const {
     isLoading,
@@ -36,9 +35,6 @@ export default function PresenceProvider({
   useEffect(() => {
     const initPresence = async () => {
       if (!user || isLoading || error || !userFromDb) return;
-
-      console.log("user from db", userFromDb);
-
       const teamId = userFromDb.teamId;
       const channel = supabase.channel(`presence:team-${teamId}`, {
         config: { presence: { key: user.id } },
@@ -47,7 +43,6 @@ export default function PresenceProvider({
       channel
         .on("presence", { event: "sync" }, () => {
           const state = channel.presenceState();
-          console.log("state presence", state, user.id);
 
           const online = Object.keys(state).reduce((acc, id) => {
             acc[id] = true;

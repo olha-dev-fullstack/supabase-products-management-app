@@ -35,8 +35,6 @@ export function DataTable<TData, TValue>({
   pageSize,
   totalPages,
 }: DataTableProps<TData, TValue>) {
-
-  console.log('111111',totalPages);
   
   const table = useReactTable({
     data,

@@ -11,7 +11,6 @@ export const useMembers = () => {
           Authorization: `Bearer ${session?.access_token}`,
         },
       });
-      console.log("membersData", membersData);
       
       return membersData;
     } catch (error) {

@@ -4,8 +4,10 @@ import { getUserFromAuth } from "./supabase-client.ts";
 import { createDrizzle, client } from "./drizzle.ts";
 
 const connectionString = Deno.env.get("SUPABASE_DB_URL")!;
+const cleanedConnectionString = connectionString.replace(/\?sslmode=prefer$/, "");
+
 export default function getDb() {
-  const client = postgres(connectionString, { prepare: false });
+  const client = postgres(cleanedConnectionString, { prepare: false });
   const db = drizzle(client);
   return db;
 }

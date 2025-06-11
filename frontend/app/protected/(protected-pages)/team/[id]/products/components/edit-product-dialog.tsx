@@ -58,20 +58,14 @@ const EditProductDialog = ({
     if (!formRef.current) return;
     const formData = new FormData(formRef.current);
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     try {
       let updateData = updateProductSchema.parse(formData);
-      console.log(updateData);
       if (updateData.imageFile) {
         const imageUrl = await uploadFile(updateData.imageFile);
         updateData = {
           ...updateData,
           imageUrl
         }
-        console.log(imageUrl);
         
       }
       mutation.mutate({ id: productData.id, data: { ...updateData } });

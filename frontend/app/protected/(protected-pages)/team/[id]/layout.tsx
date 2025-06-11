@@ -8,6 +8,7 @@ import axios from "axios";
 import { redirect } from "next/navigation";
 import React, { use } from "react";
 import { toast } from "sonner";
+import { TeamContextProvider } from "../components/TeamContext";
 
 const TeamPageLayout = ({
   children,
@@ -41,15 +42,17 @@ const TeamPageLayout = ({
   }
 
   return (
-    <SidebarProvider defaultOpen className="w-auto">
-      {data && (
-        <>
-          <AppSidebar teamId={data.id} teamName={data.name} />
-          <SidebarTrigger />
-          <div className="p-5 w-full">{children}</div>
-        </>
-      )}
-    </SidebarProvider>
+    <TeamContextProvider params={params}>
+      <SidebarProvider defaultOpen className="w-auto">
+        {data && (
+          <>
+            <AppSidebar teamId={data.id} teamName={data.name} />
+            <SidebarTrigger />
+            <div className="p-5 w-full">{children}</div>
+          </>
+        )}
+      </SidebarProvider>
+      </TeamContextProvider>
   );
 };
 

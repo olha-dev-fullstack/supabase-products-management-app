@@ -1,8 +1,9 @@
 import { requestClient } from "@/lib/request-client";
 import { useUser } from "./use-user";
+import { Session } from "node:inspector";
 
 export const useTeams = () => {
-  const { session } = useUser();
+  const { session, loading } = useUser();
   const createTeam = async ({
     name
   }: {

@@ -37,10 +37,6 @@ export function AddProductDialog() {
     if (!formRef.current) return;
     const formData = new FormData(formRef.current);
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     try {
       let createData = createProductSchema.parse(formData);
       if (createData.imageFile) {
@@ -49,8 +45,6 @@ export function AddProductDialog() {
           ...createData,
           imageUrl
         }
-        console.log(imageUrl);
-        
       }
       mutation.mutate(createData);
     } catch (error) {

@@ -13,7 +13,7 @@ const ProductsPage = () => {
   const { getProducts } = useProducts();
   const { session } = useUser();
   const [pageIndex, setPageIndex] = useState(0);
-  const pageSize = 2;
+  const pageSize = 5;
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["products", pageIndex],
@@ -36,8 +36,6 @@ const ProductsPage = () => {
   if (isLoading) {
     return <p>Loading...</p>;
   }
-
-  console.log('333333',data);
 
   return (
     <div className="flex flex-col gap-3">

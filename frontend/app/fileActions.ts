@@ -3,7 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 
 
 export const uploadFile = async (file: File) => {
-  console.log("I'm uploading file");
   const supabase = await createClient();
   
   const fileExt = file.name.split('.').pop()
@@ -13,11 +12,9 @@ export const uploadFile = async (file: File) => {
     .from("images")
     .upload(filePath, file);
   if (error) {
-    console.log("file uploadError", error.message);
     
     throw error;
   }
-  console.log("daaaataaa", data);
   
   return filePath;
 };
