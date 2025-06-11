@@ -5,15 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { signInWithEmailAndPassword } from "../../authActions";
 
 export default function SignInPage() {
+  const router = useRouter();
   const handleSignIn = async (formData: FormData) => {
     try {
       await signInWithEmailAndPassword(formData);
-      redirect("/protected");
+      router.push("/protected/team");
     } catch (error) {
       toast.error(error.message);
     }

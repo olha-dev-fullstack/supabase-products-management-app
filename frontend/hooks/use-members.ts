@@ -15,6 +15,8 @@ export const useMembers = () => {
       return membersData;
     } catch (error) {
       console.log(error.message);
+      throw error;
+
     }
   };
   return { getMembers };

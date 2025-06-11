@@ -23,6 +23,8 @@ export const useTeams = () => {
       return createdTeam;
     } catch (error) {
       console.log(error.message);
+      throw error;
+
     }
   };
 
@@ -39,6 +41,7 @@ export const useTeams = () => {
      return teamData;
     } catch (error) {
       console.log(error.message);
+      throw error;
     }
   }
 

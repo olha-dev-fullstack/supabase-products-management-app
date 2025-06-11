@@ -8,9 +8,10 @@ import { AddProductDialog } from "./components/add-product-dialog";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import { useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const ProductsPage = () => {
+  const router = useRouter();
   const { getProducts } = useProducts();
   const { session } = useUser();
   const [pageIndex, setPageIndex] = useState(0);
@@ -28,7 +29,7 @@ const ProductsPage = () => {
     toast.error(error.message);
     if (axios.isAxiosError(error)) {
       if (error.status === 403) {
-        redirect("/protected/team");
+        router.push("/protected/team");
       }
     }
     return <div>Error</div>;

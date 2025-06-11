@@ -5,7 +5,7 @@ import { useTeams } from "@/hooks/use-teams";
 import { useUser } from "@/hooks/use-user";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { use } from "react";
 import { toast } from "sonner";
 import { TeamContextProvider } from "../components/TeamContext";
@@ -17,6 +17,7 @@ const TeamPageLayout = ({
   children: React.ReactNode;
   params: Promise<{ id: string }>;
 }>) => {
+  const router = useRouter();
   const { getTeamById } = useTeams();
   const { id } = use(params);
   const { session } = useUser();
@@ -31,7 +32,7 @@ const TeamPageLayout = ({
     toast.error(error.message);
     if (axios.isAxiosError(error)) {
       if (error.status === 403) {
-        redirect("/protected/team");
+        router.push("/protected/team");
       }
     }
     return <div>Error</div>;

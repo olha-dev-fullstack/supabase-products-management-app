@@ -34,6 +34,8 @@ export const useProducts = () => {
       return createdProduct;
     } catch (error) {
       console.log(error.message);
+      throw error;
+
     }
   };
 
@@ -56,6 +58,8 @@ export const useProducts = () => {
       return {data: transformed, totalPages: productsData.totalPages};
     } catch (error) {
       console.log(error.message);
+      throw error;
+
     }
   };
 
@@ -92,6 +96,8 @@ export const useProducts = () => {
       return updatedProduct;
     } catch (error) {
       console.log(error.message);
+      throw error;
+
     }
   };
   return { createProduct, getProducts, editProduct };
