@@ -7,7 +7,7 @@ const RootPagesLayout = ({
 }>) => {
   return (
     <div className="p-10 w-full">
-      <Suspense>{children}</Suspense>
+      <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
     </div>
   );
 };
