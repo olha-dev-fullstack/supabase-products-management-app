@@ -28,7 +28,7 @@ export function AddProductDialog() {
   const mutation = useMutation({
     mutationFn: createProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries(["products"]);
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
   const handleCreateProduct = async (e: FormEvent<HTMLFormElement>) => {
@@ -43,8 +43,8 @@ export function AddProductDialog() {
         const imageUrl = await uploadFile(createData.imageFile);
         createData = {
           ...createData,
-          imageUrl
-        }
+          imageUrl,
+        };
       }
       mutation.mutate(createData);
     } catch (error) {
@@ -70,7 +70,7 @@ export function AddProductDialog() {
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="title">Title</Label>
-              <Input id="title" name="title" />
+              <Input id="title" name="title" required />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>

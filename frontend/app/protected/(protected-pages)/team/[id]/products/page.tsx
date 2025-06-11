@@ -8,6 +8,7 @@ import { AddProductDialog } from "./components/add-product-dialog";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 import { useState } from "react";
+import { redirect } from "next/navigation";
 
 const ProductsPage = () => {
   const { getProducts } = useProducts();

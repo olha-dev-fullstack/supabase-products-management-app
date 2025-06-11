@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import RowActionsMenu from "./row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const columns: ColumnDef<any>[] = [
   {
     accessorKey: "title",

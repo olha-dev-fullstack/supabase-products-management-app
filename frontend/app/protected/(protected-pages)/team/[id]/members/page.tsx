@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 const MembersPage = () => {
   const { getMembers } = useMembers();
   const { session, loading: isSessionLoading } = useUser();
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, data, error } = useQuery({
     queryKey: ["members"],
     queryFn: async () => getMembers(),
     enabled: !!session,

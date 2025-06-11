@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/sidebar";
 import { House, PersonStanding, ShoppingBag } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export function AppSidebar({ teamId, teamName }: { teamId: string, teamName: string }) {
   const origin = window.location.origin;

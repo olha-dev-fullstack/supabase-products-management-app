@@ -22,10 +22,8 @@ export default function PresenceProvider({
 
   const {
     isLoading,
-    isError,
     data: userFromDb,
     error,
-    refetch,
   } = useQuery({
     queryKey: ["getMe"],
     queryFn: getUserFromDb,
@@ -70,6 +68,7 @@ export default function PresenceProvider({
     };
 
     initPresence();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isLoading, error]);
 
   return (

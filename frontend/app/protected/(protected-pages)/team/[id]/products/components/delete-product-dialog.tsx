@@ -27,7 +27,7 @@ const DeleteProductDialog = ({
     mutationFn: () =>
       editProduct({ id: productId, data: { status: StatusEnum.DELETED } }),
     onSuccess: () => {
-      queryClient.invalidateQueries(["products"]);
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 
@@ -55,7 +55,9 @@ const DeleteProductDialog = ({
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit" onClick={handleDeleteProduct}>Delete</Button>
+          <Button type="submit" onClick={handleDeleteProduct}>
+            Delete
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

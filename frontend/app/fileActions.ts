@@ -8,7 +8,7 @@ export const uploadFile = async (file: File) => {
   const fileExt = file.name.split('.').pop()
   const filePath = `public/${file.name}-${Math.random()}.${fileExt}`;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("images")
     .upload(filePath, file);
   if (error) {

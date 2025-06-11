@@ -1,12 +1,10 @@
 import { useTeams } from "@/hooks/use-teams";
 import { useUser } from "@/hooks/use-user";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { redirect } from "next/navigation";
-import { createContext, useState, useContext, use, useEffect } from "react";
-import { toast } from "sonner";
+import { createContext, use, useContext } from "react";
 
 interface TeamContextType {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   teamData: any; // Replace `any` with your actual team data type if known
   refetchTeam: () => void;
 }
@@ -20,15 +18,12 @@ export function TeamContextProvider({
   children: React.ReactNode;
   params: Promise<{ id: string }>;
 }>) {
-  const { session, loading } = useUser();
+  const { session} = useUser();
   const { getTeamById } = useTeams();
   const { id } = use(params);
   const {
-    isLoading,
-    isError,
     data: teamData,
     refetch,
-    error,
   } = useQuery({
     queryKey: ["team", id],
     queryFn: () => getTeamById({ teamId: id }),

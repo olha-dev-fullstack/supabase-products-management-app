@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import { uploadFile } from "@/app/fileActions";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -6,19 +9,17 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { updateProductSchema } from "../utils/zod-schema";
-import React, { useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useProducts } from "@/hooks/use-products";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getFileUrl, uploadFile } from "@/app/fileActions";
 import Image from "next/image";
+import { FormEvent, useRef, useState } from "react";
+import { updateProductSchema } from "../utils/zod-schema";
+import { toast } from "sonner";
 
 const EditProductDialog = ({
   productData,
@@ -36,7 +37,7 @@ const EditProductDialog = ({
   const mutation = useMutation({
     mutationFn: editProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries(["products"]);
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
   const imageChange = (e) => {
@@ -47,7 +48,7 @@ const EditProductDialog = ({
 
   const handleFileClear = () => {
     setImage(null);
-    const fileInput = formRef.current?.querySelector('input[name="imageFile"]');
+    const fileInput = formRef.current?.querySelector('input[name="imageFile"]') as HTMLInputElement | null;
     if (fileInput) {
       fileInput.value = "";
     }
@@ -64,9 +65,8 @@ const EditProductDialog = ({
         const imageUrl = await uploadFile(updateData.imageFile);
         updateData = {
           ...updateData,
-          imageUrl
-        }
-        
+          imageUrl,
+        };
       }
       mutation.mutate({ id: productData.id, data: { ...updateData } });
     } catch (error) {
@@ -115,7 +115,12 @@ const EditProductDialog = ({
             )}
             <div className="grid gap-3">
               <Label htmlFor="imageFile">Image</Label>
-              <Input id="imageFile" name="imageFile" type="file" onChange={imageChange}/>
+              <Input
+                id="imageFile"
+                name="imageFile"
+                type="file"
+                onChange={imageChange}
+              />
             </div>
           </div>
           <DialogFooter>

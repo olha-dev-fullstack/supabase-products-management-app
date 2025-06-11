@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import CreateTeamCard from "@/components/create-team-card";
 import JoinTeamCard from "@/components/join-team-card";

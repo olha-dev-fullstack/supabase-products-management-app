@@ -17,7 +17,7 @@ const JoinTeamCard = () => {
   const mutation = useMutation({
     mutationFn: joinTeam,
     onSuccess: () => {
-      queryClient.invalidateQueries(["team"]);
+      queryClient.invalidateQueries({ queryKey: ["team"] });
     },
   });
 
@@ -35,12 +35,16 @@ const JoinTeamCard = () => {
         <CardContent>
           <div className="grid w-full items-center">
             <div className="flex flex-col space-y-1.5">
-              <Input id="joinCode" name="joinCode" placeholder="Paste your team code here" />
+              <Input
+                id="joinCode"
+                name="joinCode"
+                placeholder="Paste your team code here"
+              />
             </div>
           </div>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button formAction={handleJoinTeam} >Join</Button>
+          <Button formAction={handleJoinTeam}>Join</Button>
         </CardFooter>
       </form>
     </Card>

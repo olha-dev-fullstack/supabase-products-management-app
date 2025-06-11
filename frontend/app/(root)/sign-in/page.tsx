@@ -13,7 +13,7 @@ export default function SignInPage() {
   const handleSignIn = async (formData: FormData) => {
     try {
       await signInWithEmailAndPassword(formData);
-      return redirect("/protected");
+      redirect("/protected");
     } catch (error) {
       toast.error(error.message);
     }

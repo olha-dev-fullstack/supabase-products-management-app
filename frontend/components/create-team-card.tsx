@@ -18,7 +18,7 @@ const CreateTeamCard = () => {
   const mutation = useMutation({
     mutationFn: createTeam,
     onSuccess: () => {
-      queryClient.invalidateQueries(["team"]);
+      queryClient.invalidateQueries({ queryKey: ["team"] });
     },
   });
 
@@ -29,9 +29,9 @@ const CreateTeamCard = () => {
   };
   return (
     <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Create team</CardTitle>
-        </CardHeader>
+      <CardHeader>
+        <CardTitle>Create team</CardTitle>
+      </CardHeader>
       <form className="gap-4">
         <CardContent>
           <div className="grid w-full items-center">
